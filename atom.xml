@@ -4,7 +4,7 @@
   <title><![CDATA[jokefaker的博客]]></title>
   <link href="http://jokefaker.github.io/atom.xml" rel="self"/>
   <link href="http://jokefaker.github.io/"/>
-  <updated>2014-06-11T17:18:40+08:00</updated>
+  <updated>2014-06-11T17:24:31+08:00</updated>
   <id>http://jokefaker.github.io/</id>
   <author>
     <name><![CDATA[荒唐的废次]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Earn-to-create-a-github-based-blog]]></title>
+    <link href="http://jokefaker.github.io/blog/2014/06/11/earn-to-create-a-github-based-blog/"/>
+    <updated>2014-06-11T17:24:13+08:00</updated>
+    <id>http://jokefaker.github.io/blog/2014/06/11/earn-to-create-a-github-based-blog</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>

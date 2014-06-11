@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[jokefaker的博客]]></title>
-  <link href="http://jokefaker.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Blog | jokefaker的博客]]></title>
+  <link href="http://jokefaker.github.io/blog/categories/blog/atom.xml" rel="self"/>
   <link href="http://jokefaker.github.io/"/>
   <updated>2014-06-11T18:07:11+08:00</updated>
   <id>http://jokefaker.github.io/</id>
@@ -36,11 +36,10 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>You have already activated rake 10.1.0, but your Gemfile requires rake 0.9.2.2. Prepending `bundle exec` to your command may solve this.
-</span><span class='line'>// 意思就是在命令前面加上bundle exec就可以了</span></code></pre></td></tr></table></div></figure>
-
+<p><code>
+You have already activated rake 10.1.0, but your Gemfile requires rake 0.9.2.2. Prepending `bundle exec` to your command may solve this.
+// 意思就是在命令前面加上bundle exec就可以了
+</code></p>
 ]]></content>
   </entry>
   

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "learn-to-create-a-github-based-blog"
+title: "基于Github的个人博客搭建"
 date: 2014-06-11 18:05:35 +0800
 comments: true
 categories: blog

@@ -9,10 +9,12 @@
   <meta name="author" content="荒唐的废次">
 
   
-  <meta name="description" content="教程 破船之家：利用Octopress搭建一个Github博客
-唐巧：象写程序一样写博客：搭建基于github的博客 遇到的问题 安装不了ruby 1.9.3 其实只要安装ruby 1.9.3 或者以上版本就行了，不一定必须 1.9.3 执行rake命令的时候提示： 1
-2
-You have &hellip;">
+  <meta name="description" content="目标 使用MobileDeviceAccess来从iOS系统中读取以下内容： 短信
+联系人
+已安装的软件 资源 Github上的iTools例子 该Demo已经实现了如下功能： 设备的检测。
+设备信息读取。
+已经安装的App管理。
+用户文件管理。 关于MobileDeviceAccess的网站 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +70,207 @@ You have &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/17/use-mobiledeviceaccess-to-get-addressbook-and-sms/">使用MobileDeviceAccess获取iOS的短信和联系人</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-17T15:53:10+08:00" pubdate data-updated="true">Jun 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>目标</h3>
+
+<p>使用MobileDeviceAccess来从iOS系统中读取以下内容：</p>
+
+<ul>
+<li>短信</li>
+<li>联系人</li>
+<li>已安装的软件</li>
+</ul>
+
+
+<h3>资源</h3>
+
+<ul>
+<li><p><a href="https://github.com/heiby/iTools">Github上的iTools例子</a> 该Demo已经实现了如下功能：</p>
+
+<ul>
+<li>设备的检测。</li>
+<li>设备信息读取。</li>
+<li>已经安装的App管理。</li>
+<li>用户文件管理。</li>
+</ul>
+</li>
+<li><a href="www.libimobiledevice.org">关于MobileDeviceAccess的网站</a></li>
+</ul>
+
+
+<h3>获取短信、联系人</h3>
+
+<p>MobileDeviceAccess里面封装了很多类，只需要使用某些类去获取自己想要的内容即可，下面记录一下过程：</p>
+
+<ul>
+<li>第一步：谷歌了一下iOS设备的联系人、短信的存储位置：<code>/private/var/mobile/Library/</code></li>
+<li>第二步：浏览了一下MobileDeviceAccess的各个类，发现了<code>AMFileRelay</code>这个类是用来读取文件集合的。</li>
+<li>第三步：整理了一下<code>AMFileRelay</code>的说明，大概意思是该类定义了几个集合名称，而这些集合名称对应着iOS设备下不同的目录，经整理后的集合名称-目录对应关系如下：</li>
+</ul>
+
+
+<TABLE>
+        <TR><TH>Set Name</TH><TH>File/Directory</TH></TR>
+        <TR><TD>AppleSupport</TD><TD>/private/var/logs/AppleSupport</TD></TR>
+        <TR><TD>Caches</TD><TD>/private/var/mobile/Library/Caches</TD></TR>
+        <TR><TD>CrashReporter</TD><TD>/Library/Logs/CrashReporter<BR>/private/var/mobile/Library/Logs/CrashReporter</TD></TR>
+        <TR><TD>MobileWirelessSync</TD><TD>/private/var/mobile/Library/Logs/MobileWirelessSync</TD></TR>
+        
+        <TR><TD>Lockdown</TD>
+            <TD>/private/var/root/Library/Lockdown/activation_records
+                <BR>/private/var/root/Library/Lockdown/data_ark.plist
+                    <BR>/private/var/root/Library/Lockdown/pair_records
+                    <BR>/Library/Logs/lockdownd.log
+            </TD>
+        </TR>
+ 
+        <TR><TD>MobileInstallation</TD>
+            <TD>/var/mobile/Library/Logs/MobileInstallation
+                    <BR>/var/mobile/Library/Caches/com.apple.mobile.installation.plist
+                   <BR>/var/mobile/Library/MobileInstallation/ArchivedApplications.plist
+                   <BR>/var/mobile/Library/MobileInstallation/ApplicationAttributes.plist
+                     <BR>/var/mobile/Library/MobileInstallation/SafeHarbor.plist
+            </TD>
+        </TR>
+ 
+        <TR><TD>SafeHarbor</TD><TD>/var/mobile/Library/SafeHarbor</TD></TR>
+        
+        <TR><TD>Network</TD>
+        <TD>/private/var/log/ppp
+                <BR>/private/var/log/racoon.log
+                <BR>/var/log/eapolclient.en0.log
+        </TD>
+        </TR>
+ 
+        <TR><TD>SystemConfiguration</TD><TD>/Library/Preferences/SystemConfiguration</TD></TR>
+        
+        <TR><TD>UserDatabases</TD>
+            <TD>/private/var/mobile/Library/AddressBook
+                    <BR>/private/var/mobile/Library/Calendar
+                    <BR>/private/var/mobile/Library/CallHistory
+                    <BR>/private/var/mobile/Library/Mail/Envelope Index
+                    <BR>/private/var/mobile/Library/SMS
+            </TD>
+        </TR>
+        
+        <TR><TD>VPN</TD><TD>/private/var/log/racoon.log</TD></TR>
+        <TR><TD>WiFi</TD><TD>/var/log/wifimanager.log
+ <BR>/var/log/eapolclient.en0.log</TD></TR>
+        <TR><TD>tmp</TD><TD>/private/var/tmp</TD></TR>
+</TABLE>
+
+
+<p>所以，需要使用的文件集合名称就是<code>UserDatabases</code></p>
+
+<ul>
+<li>第四步：使用<code>AMFileRelay</code>读取文件集合，具体代码如下：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-(void)setDevice:(AMDevice *)device{
+</span><span class='line'>    if (![_device.udid isEqualToString:device.udid]) {
+</span><span class='line'>        _device=device;
+</span><span class='line'>        
+</span><span class='line'>        [_deviceInfo setObject:@([_device newAFCRootDirectory]!=nil) forKey:@"isJailbreak"];
+</span><span class='line'>        
+</span><span class='line'>        /**
+</span><span class='line'>         *  添加的代码
+</span><span class='line'>         *  作为测试，我们在获取设备信息的时候直接将文件读出来存储到桌面
+</span><span class='line'>         */
+</span><span class='line'>        AMFileRelay *relay = [device newAMFileRelay];
+</span><span class='line'>        NSOutputStream *output = [NSOutputStream outputStreamToFileAtPath:@"/Users/zhouguoyong/Desktop/UserDatabases.cpio" append:NO];
+</span><span class='line'>        [relay getFileSet:@"UserDatabases" into:output];
+</span><span class='line'>        /**
+</span><span class='line'>         *  添加的代码
+</span><span class='line'>         */
+</span><span class='line'>
+</span><span class='line'>        id value=[_device deviceValueForKey:@"BatteryCurrentCapacity" inDomain:@"com.apple.mobile.battery"];
+</span><span class='line'>        if(value)[_deviceInfo setObject:value forKey:@"BatteryCurrentCapacity"];
+</span><span class='line'>        
+</span><span class='line'>        float total=[[_device deviceValueForKey:@"TotalDiskCapacity" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+</span><span class='line'>        float dataA=[[_device deviceValueForKey:@"TotalDataAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+</span><span class='line'>        float systemA=[[_device deviceValueForKey:@"TotalSystemAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+</span><span class='line'>        value=[NSString stringWithFormat:@"%.1fGB/%.1fGB",(dataA+systemA)/1024.f,total/1024.f];
+</span><span class='line'>        if(value)[_deviceInfo setObject:value forKey:@"DiskUsage"];
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<ul>
+<li>第五步：根据<code>AMFileRelay</code>的说明，读取出来的文件集合是<a href="http://baike.baidu.com/view/2524122.htm">cpio</a>格式的，需要将其解压。解压命令：<code>cpio -idmv &lt; UserDatabases.cpio</code></li>
+<li>第六步：可以看到解压出来的文件都是sqlite的数据库文件，剩下的就是数据库操作了。</li>
+</ul>
+
+
+<h3>问题</h3>
+
+<ul>
+<li>在mac上的iTools工具只有在iCould关闭通讯录的时候才能读取到联系人，而使用上述方法获取联系人的时候，在开启和关闭iCould通讯录的时候都可以拿到数据，这一点让我比较奇怪，猜测是在iCould关闭的时候iOS设备上就下载了iCould上的内容，所有我后来的关闭iCould通讯录实际上都无伤大雅了。</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -138,6 +341,10 @@ You have &hellip;">
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/17/use-mobiledeviceaccess-to-get-addressbook-and-sms/">使用MobileDeviceAccess获取iOS的短信和联系人</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/06/11/learn-to-create-a-github-based-blog/">基于Github的个人博客搭建</a>

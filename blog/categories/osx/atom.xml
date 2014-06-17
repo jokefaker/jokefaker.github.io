@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[jokefaker的博客]]></title>
-  <link href="http://jokefaker.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: OSX | jokefaker的博客]]></title>
+  <link href="http://jokefaker.github.io/blog/categories/osx/atom.xml" rel="self"/>
   <link href="http://jokefaker.github.io/"/>
   <updated>2014-06-18T00:28:52+08:00</updated>
   <id>http://jokefaker.github.io/</id>
@@ -114,63 +114,38 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-(void)setDevice:(AMDevice *)device{
-</span><span class='line'>    if (![_device.udid isEqualToString:device.udid]) {
-</span><span class='line'>        _device=device;
-</span><span class='line'>        
-</span><span class='line'>        [_deviceInfo setObject:@([_device newAFCRootDirectory]!=nil) forKey:@"isJailbreak"];
-</span><span class='line'>        
-</span><span class='line'>        /**
-</span><span class='line'>         *  添加的代码
-</span><span class='line'>         *  作为测试，我们在获取设备信息的时候直接将文件读出来存储到桌面
-</span><span class='line'>         */
-</span><span class='line'>        AMFileRelay *relay = [device newAMFileRelay];
-</span><span class='line'>        NSOutputStream *output = [NSOutputStream outputStreamToFileAtPath:@"/Users/zhouguoyong/Desktop/UserDatabases.cpio" append:NO];
-</span><span class='line'>        [relay getFileSet:@"UserDatabases" into:output];
-</span><span class='line'>        /**
-</span><span class='line'>         *  添加的代码
-</span><span class='line'>         */
-</span><span class='line'>
-</span><span class='line'>        id value=[_device deviceValueForKey:@"BatteryCurrentCapacity" inDomain:@"com.apple.mobile.battery"];
-</span><span class='line'>        if(value)[_deviceInfo setObject:value forKey:@"BatteryCurrentCapacity"];
-</span><span class='line'>        
-</span><span class='line'>        float total=[[_device deviceValueForKey:@"TotalDiskCapacity" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
-</span><span class='line'>        float dataA=[[_device deviceValueForKey:@"TotalDataAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
-</span><span class='line'>        float systemA=[[_device deviceValueForKey:@"TotalSystemAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
-</span><span class='line'>        value=[NSString stringWithFormat:@"%.1fGB/%.1fGB",(dataA+systemA)/1024.f,total/1024.f];
-</span><span class='line'>        if(value)[_deviceInfo setObject:value forKey:@"DiskUsage"];
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<p>```    <br/>
+&ndash;(void)setDevice:(AMDevice *)device{</p>
 
+<pre><code>if (![_device.udid isEqualToString:device.udid]) {
+    _device=device;
 
-<p></p>
+    [_deviceInfo setObject:@([_device newAFCRootDirectory]!=nil) forKey:@"isJailbreak"];
+
+    /**
+     *  添加的代码
+     *  作为测试，我们在获取设备信息的时候直接将文件读出来存储到桌面
+     */
+    AMFileRelay *relay = [device newAMFileRelay];
+    NSOutputStream *output = [NSOutputStream outputStreamToFileAtPath:@"/Users/zhouguoyong/Desktop/UserDatabases.cpio" append:NO];
+    [relay getFileSet:@"UserDatabases" into:output];
+    /**
+     *  添加的代码
+     */
+
+    id value=[_device deviceValueForKey:@"BatteryCurrentCapacity" inDomain:@"com.apple.mobile.battery"];
+    if(value)[_deviceInfo setObject:value forKey:@"BatteryCurrentCapacity"];
+
+    float total=[[_device deviceValueForKey:@"TotalDiskCapacity" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+    float dataA=[[_device deviceValueForKey:@"TotalDataAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+    float systemA=[[_device deviceValueForKey:@"TotalSystemAvailable" inDomain:@"com.apple.disk_usage"] longLongValue]/1048576.f;
+    value=[NSString stringWithFormat:@"%.1fGB/%.1fGB",(dataA+systemA)/1024.f,total/1024.f];
+    if(value)[_deviceInfo setObject:value forKey:@"DiskUsage"];
+}
+</code></pre>
+
+<p>}
+```</p>
 
 <ul>
 <li>第五步：根据<code>AMFileRelay</code>的说明，读取出来的文件集合是<a href="http://baike.baidu.com/view/2524122.htm">cpio</a>格式的，需要将其解压。解压命令：<code>cpio -idmv &lt; UserDatabases.cpio</code></li>
@@ -183,37 +158,6 @@
 <ul>
 <li>在mac上的iTools工具只有在iCould关闭通讯录的时候才能读取到联系人，而使用上述方法获取联系人的时候，在开启和关闭iCould通讯录的时候都可以拿到数据，这一点让我比较奇怪，猜测是在iCould关闭的时候iOS设备上就下载了iCould上的内容，所有我后来的关闭iCould通讯录实际上都无伤大雅了。</li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[基于Github的个人博客搭建]]></title>
-    <link href="http://jokefaker.github.io/blog/2014/06/11/learn-to-create-a-github-based-blog/"/>
-    <updated>2014-06-11T18:05:35+08:00</updated>
-    <id>http://jokefaker.github.io/blog/2014/06/11/learn-to-create-a-github-based-blog</id>
-    <content type="html"><![CDATA[<h3>教程</h3>
-
-<p>破船之家：<a href="http://beyondvincent.com/blog/2013/08/03/108-creating-a-github-blog-using-octopress/">利用Octopress搭建一个Github博客</a><br/>
-唐巧：<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/">象写程序一样写博客：搭建基于github的博客</a></p>
-
-<h3>遇到的问题</h3>
-
-<ul>
-<li>安装不了ruby 1.9.3
-
-<ul>
-<li>其实只要安装ruby 1.9.3 或者以上版本就行了，不一定必须 1.9.3</li>
-</ul>
-</li>
-<li>执行rake命令的时候提示：</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>You have already activated rake 10.1.0, but your Gemfile requires rake 0.9.2.2. Prepending `bundle exec` to your command may solve this.
-</span><span class='line'>// 意思就是在命令前面加上bundle exec就可以了</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>

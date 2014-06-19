@@ -4,7 +4,7 @@
   <title><![CDATA[jokefaker的博客]]></title>
   <link href="http://jokefaker.github.io/atom.xml" rel="self"/>
   <link href="http://jokefaker.github.io/"/>
-  <updated>2014-06-18T00:28:52+08:00</updated>
+  <updated>2014-06-19T12:07:59+08:00</updated>
   <id>http://jokefaker.github.io/</id>
   <author>
     <name><![CDATA[荒唐的废次]]></name>
@@ -173,7 +173,7 @@
 <p></p>
 
 <ul>
-<li>第五步：根据<code>AMFileRelay</code>的说明，读取出来的文件集合是<a href="http://baike.baidu.com/view/2524122.htm">cpio</a>格式的，需要将其解压。解压命令：<code>cpio -idmv &lt; UserDatabases.cpio</code></li>
+<li>第五步：根据<code>AMFileRelay</code>的说明，读取出来的文件集合是<a href="http://baike.baidu.com/view/2524122.htm">cpio</a>格式的，需要将其解压。<del>解压命令：<code>cpio -idmv &lt; UserDatabases.cpio</code></del>经过测试，OSX的归档文件应该是支持解压的，所以直接双击解压就可以了。</li>
 <li>第六步：可以看到解压出来的文件都是sqlite的数据库文件，剩下的就是数据库操作了。</li>
 </ul>
 

@@ -114,7 +114,7 @@ MobileDeviceAccess里面封装了很多类，只需要使用某些类去获取�
 }
 ```   
  
-* 第五步：根据`AMFileRelay`的说明，读取出来的文件集合是[cpio](http://baike.baidu.com/view/2524122.htm)格式的，需要将其解压。解压命令：`cpio -idmv < UserDatabases.cpio`
+* 第五步：根据`AMFileRelay`的说明，读取出来的文件集合是[cpio](http://baike.baidu.com/view/2524122.htm)格式的，需要将其解压。~~解压命令：`cpio -idmv < UserDatabases.cpio`~~经过测试，OSX的归档文件应该是支持解压的，所以直接双击解压就可以了。
 * 第六步：可以看到解压出来的文件都是sqlite的数据库文件，剩下的就是数据库操作了。    
 
 ### 问题  
